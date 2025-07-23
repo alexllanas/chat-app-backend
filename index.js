@@ -13,6 +13,11 @@ app.get("/api/v1", (req, res) => {
   res.send("Chat App");
 });
 
+app.post("/api/v1/register", (req, res) => {
+  // res.send(`${req}`);
+  console.log(`${req}`)
+});
+
 wss.on("connection", function connection(ws) {
   console.log("Client connected");
 
