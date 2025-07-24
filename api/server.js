@@ -12,6 +12,10 @@ app.get("/api/v1", (req, res) => {
   res.send("Chat App");
 });
 
+app.post("/api/v1/register", (req, res) => {
+  res.send(`Registering user: ${req}`);
+});
+
 // Websocket
 const wss = new WebSocketServer({ server });
 
