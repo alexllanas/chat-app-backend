@@ -13,7 +13,9 @@ app.get("/api/v1", (req, res) => {
 });
 
 app.post("/api/v1/register", (req, res) => {
-  res.send(`Registering user: ${req}`);
+  res.send({
+    "id" : "1"
+  });
 });
 
 // Websocket
