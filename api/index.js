@@ -2,7 +2,7 @@ import express from "express";
 import http from "http";
 
 const app = express();
-const serverPort = process.env.PORT || 80;
+const serverPort = process.env.PORT || 8080;
 export const server = http.createServer(app);
 
 app.get("/api/v1", (req, res) => {
