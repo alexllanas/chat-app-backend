@@ -17,12 +17,9 @@ app.get("/api/v1", (req, res) => {
 
 function hashPassword(password) {
   const saltRounds = 10;
-  try {
-    return bcrypt.hash(password, saltRounds);
-  } catch (e) {
-    console.error('Error hashing password:', err);
-    throw e;
-  }
+  return bcrypt.hash(password, saltRounds, (err, hash) => {
+      return hash
+  });
 }
 
 app.post("/api/v1/register", (req, res) => {
@@ -31,9 +28,9 @@ app.post("/api/v1/register", (req, res) => {
   const createdAt = new Date().toISOString();
 
   res.send({
-    "id" : uuidv4(),
-    "hash" : hash,
-    "createdAt" : createdAt,
+    "id": uuidv4(),
+    "hash": hash,
+    "createdAt": createdAt,
   });
 });
 
