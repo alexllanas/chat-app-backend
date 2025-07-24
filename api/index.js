@@ -14,6 +14,6 @@ app.post("/api/v1/register", (req, res) => {
   console.log(`${req}`)
 });
 
-server.listen(serverPort, () => {
+server.listen(serverPort, '0.0.0.0', () => {
   console.log(`HTTP and WebSocket server listening on port ${serverPort}`);
 });
