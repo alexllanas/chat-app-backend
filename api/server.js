@@ -1,6 +1,8 @@
 import express from "express";
 import http from "http";
 import {WebSocketServer} from "ws";
+const bcrypt = require('bcrypt')
+const { v4: uuidv4 } = require('uuid');
 
 const app = express();
 export const server = http.createServer(app);
@@ -12,9 +14,26 @@ app.get("/api/v1", (req, res) => {
   res.send("Chat App");
 });
 
+function hashPassword(password) {
+  const saltRounds = 10;
+  return bcrypt.hash(password, saltRounds, (err, hash) => {
+    if (err) {
+      console.error('Error hashing password: ', err);
+      return;
+    }
+    return hash;
+  });
+}
+
 app.post("/api/v1/register", (req, res) => {
+
+  const hash = hashPassword(req.password);
+  const createdAt = new Date().toISOString();
+
   res.send({
-    "id" : "1"
+    "id" : uuidv4,
+    "email" : hash,
+    "createdAt" : createdAt,
   });
 });
 
