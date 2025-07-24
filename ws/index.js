@@ -1,5 +1,5 @@
 import {WebSocketServer} from "ws";
-import {server} from "../api/index.js";
+import {server} from "../api/server.js";
 
 const wss = new WebSocketServer({ server });
 
