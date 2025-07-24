@@ -4,6 +4,7 @@ import http from "http";
 const app = express();
 const serverPort = process.env.PORT || 8080;
 export const server = http.createServer(app);
+app.use(express.json());
 
 app.get("/api/v1", (req, res) => {
   res.send("Chat App");
