@@ -3,7 +3,8 @@ import http from "http";
 import {WebSocketServer} from "ws";
 import bcrypt from "bcrypt";
 
-const { v4: uuidv4 } = require('uuid');
+import {v4 as uuidv4} from "uuid";
+
 
 const app = express();
 export const server = http.createServer(app);
