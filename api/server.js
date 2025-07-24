@@ -33,8 +33,8 @@ app.post("/api/v1/register", (req, res) => {
   const createdAt = new Date().toISOString();
 
   res.send({
-    "id" : uuidv4,
-    "email" : hash,
+    "id" : uuidv4(),
+    "hash" : hash,
     "createdAt" : createdAt,
   });
 });
