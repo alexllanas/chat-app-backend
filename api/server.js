@@ -1,7 +1,8 @@
 import express from "express";
 import http from "http";
 import {WebSocketServer} from "ws";
-const bcrypt = require('bcrypt')
+import bcrypt from "bcrypt";
+
 const { v4: uuidv4 } = require('uuid');
 
 const app = express();
