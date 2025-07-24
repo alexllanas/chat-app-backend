@@ -5,7 +5,6 @@ import bcrypt from "bcrypt";
 
 import {v4 as uuidv4} from "uuid";
 
-
 const app = express();
 export const server = http.createServer(app);
 const PORT = process.env.PORT || 3000;
@@ -18,13 +17,12 @@ app.get("/api/v1", (req, res) => {
 
 function hashPassword(password) {
   const saltRounds = 10;
-  return bcrypt.hash(password, saltRounds, (err, hash) => {
-    if (err) {
-      console.error('Error hashing password: ', err);
-      return;
-    }
-    return hash;
-  });
+  try {
+    return bcrypt.hash(password, saltRounds);
+  } catch (e) {
+    console.error('Error hashing password:', err);
+    throw e;
+  }
 }
 
 app.post("/api/v1/register", (req, res) => {
