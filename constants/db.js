@@ -1,0 +1,3 @@
+export const POSTGRES_ERRORS = {
+    UNIQUE_VIOLATION: '23505'
+};
