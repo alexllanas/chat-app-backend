@@ -3,7 +3,6 @@ import {config} from "dotenv";
 
 config();
 
-
 export const client = new Client({
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
