@@ -5,20 +5,10 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import {v4 as uuidv4} from "uuid";
-import {POSTGRES_ERRORS} from "./constants/db.js";
+import {POSTGRES_ERRORS} from "./database/constants.js";
 
-import {Client} from 'pg'
-import {config} from "dotenv";
-
-config();
-
-const client = new Client({
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    database: process.env.DB_NAME,
-});
+import {client} from "./database/config.js";
+import {authenticateToken} from "./middleware/auth.js";
 
 function insertUser(userId, username, email, hash, createdAt) {
     const query = `
@@ -117,7 +107,7 @@ app.post("/api/v1/login", async (req, res) => {
     }
 
     const query = `
-        SELECT id, password_hash
+        SELECT id, username, password_hash
         FROM users
         WHERE email = $1
     `
@@ -137,10 +127,20 @@ app.post("/api/v1/login", async (req, res) => {
 
     res.json({
         "id": user.id,
+        "username": user.username,
         "email": email,
         "access_token": token
     })
 });
+
+app.get("/api/v1/users",
+    // authenticateToken,       // uncomment to authenticate user request, only removed for testing
+async (req, res) => {
+    const users = await client.query("SELECT id, username, email FROM users");
+    res.json({
+        users: users.rows
+    });
+})
 
 // Websocket
 const wss = new WebSocketServer({server});
@@ -156,19 +156,19 @@ wss.on("connection", function connection(ws) {
             console.log("received: ", data);
             ws.send(`you sent data to the server.`);
 
-            if (data.type === "register" && data.userId) {
-                clients.set(data.userId, ws);
-                console.log(`Registered user ${data.userId}`);
-            }
-            if (data.type === 'message' && data.message && data.userId && data.toUserId) {
-                const client = clients.get(data.toUserId)
-                client.send(JSON.stringify(
-                    {
-                        fromUserId: data.userId,
-                        message: data.message
-                    }
-                ))
-            }
+            // if (data.type === "register" && data.userId) {
+            //     clients.set(data.userId, ws);
+            //     console.log(`Registered user ${data.userId}`);
+            // }
+            // if (data.type === 'message' && data.message && data.userId && data.toUserId) {
+            //     const client = clients.get(data.toUserId)
+            //     client.send(JSON.stringify(
+            //         {
+            //             fromUserId: data.userId,
+            //             message: data.message
+            //         }
+            //     ))
+            // }
 
         } catch (e) {
             console.error("Invalid message", e);
