@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 import {v4 as uuidv4} from "uuid";
 import {POSTGRES_ERRORS} from "./database/constants.js";
 
-import {client} from "./database/config.js";
+// import {client} from "./database/config.js";
 import {authenticateToken} from "./middleware/auth.js";
 
 // function insertUser(userId, username, email, hash, createdAt) {
