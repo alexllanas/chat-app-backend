@@ -55,9 +55,9 @@ import {authenticateToken} from "./middleware/auth.js";
 //         console.log(err);
 //     })
 //
-// const app = express();
-// export const server = http.createServer(app);
-// const PORT = process.env.PORT || 3000;
+const app = express();
+export const server = http.createServer(app);
+const PORT = process.env.PORT || 3000;
 //
 // app.use(express.json());
 //
