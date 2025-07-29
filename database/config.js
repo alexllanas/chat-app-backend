@@ -1,5 +1,6 @@
 import {Client} from "pg";
 import {config} from "dotenv";
+import {readFileSync} from "node:fs";
 
 config();
 
@@ -9,6 +10,11 @@ export const client = new Client({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     database: process.env.DB_NAME,
+    ssl: {
+        require: true,
+        rejectUnauthorized: true,
+        ca: readFileSync('/Users/alex/AWS/us-east-1-bundle.pem').toString(),
+    }
 });
 
 export function connectDb() {
