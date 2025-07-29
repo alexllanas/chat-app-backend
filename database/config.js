@@ -10,3 +10,13 @@ export const client = new Client({
     port: process.env.DB_PORT,
     database: process.env.DB_NAME,
 });
+
+export function connectDb() {
+    client.connect()
+        .then(() => {
+            console.log("Connected to DB");
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+}
