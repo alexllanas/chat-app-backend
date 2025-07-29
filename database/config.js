@@ -13,7 +13,7 @@ export const client = new Client({
     ssl: {
         require: true,
         rejectUnauthorized: true,
-        ca: readFileSync('/Users/alex/AWS/us-east-1-bundle.pem').toString(),
+        ca: readFileSync(process.env.DB_CA).toString(),
     }
 });
 
