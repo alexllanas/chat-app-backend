@@ -11,7 +11,7 @@ export function setupWebSockets(server) {
             try {
                 const data = JSON.parse(message);
                 console.log("received: ", data);
-                ws.send(data);
+                ws.send(message);
 
                 // if (data.type === "register" && data.userId) {
                 //     clients.set(data.userId, ws);
