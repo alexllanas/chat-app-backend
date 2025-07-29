@@ -32,6 +32,6 @@ export function setupWebSockets(server) {
             }
         });
 
-        ws.send("Connected to WebSocket server");
+        // ws.send("Connected to WebSocket server");
     });
 }
