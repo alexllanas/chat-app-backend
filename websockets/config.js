@@ -11,27 +11,25 @@ export function setupWebSockets(server) {
             try {
                 const data = JSON.parse(message);
                 console.log("received: ", data);
-                ws.send(data.content);
 
-                // if (data.type === "register" && data.userId) {
-                //     clients.set(data.userId, ws);
-                //     console.log(`Registered user ${data.userId}`);
-                // }
-                // if (data.type === 'message' && data.message && data.userId && data.toUserId) {
-                //     const client = clients.get(data.toUserId)
-                //     client.send(JSON.stringify(
-                //         {
-                //             fromUserId: data.userId,
-                //             message: data.message
-                //         }
-                //     ))
-                // }
+                if (data.type === "register" && data.user_id) {
+                    clients.set(data.user_id, ws);
+                    console.log(`Registered user ${data.user_id}`);
+                } else if (data.type === 'message' && data.content && data.sender_id && data.recipient_id) {
+                    const client = clients.get(data.recipient_id)
+                    client.send(JSON.stringify(
+                        {
+                            fromUserId: data.sender_id,
+                            message: data.content
+                        }
+                    ))
+                }
 
             } catch (e) {
                 console.error("Invalid message", e);
             }
         });
 
-        // ws.send("Connected to WebSocket server");
+        ws.send("Connected to WebSocket server");
     });
 }
