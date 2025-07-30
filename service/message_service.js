@@ -49,5 +49,16 @@ export async function saveMessage(
         VALUES ($1, $2, $3, $4, $5, $6)
     `
     await client.query(query, [messageId, conversationId, senderId, recipientId, content, createdAt])
+}
 
+export async function getConversationMetadata(userId) {
+    const query = `
+        SELECT c.id, u.id as userId, c.last_message, c.last_message_timestamp, u.username
+        FROM conversations as c
+        JOIN users as u on u.id = (CASE WHEN c.user1_id = :userId THEN c.user2_id ELSE c.user1_id END)
+        WHERE c.user1_id = :userId OR c.user2_id = :userId
+        ORDER BY c.last_message_timestamp DESC;
+    `
+    const result = await client.query(query, {userId})
+    return result.rows;
 }

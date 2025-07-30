@@ -4,6 +4,7 @@ import {setupWebSockets} from "./websockets/ws_config.js";
 import {authenticateToken} from "./middleware/auth.js";
 import {client, connectDb} from "./database/db_config.js";
 import userRoutes from "./route/user_routes.js";
+import messageRoutes from "./route/message_routes.js";
 
 
 const app = express();
@@ -12,7 +13,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.use("/api/v1", userRoutes);
+app.use("/api/v1", userRoutes, messageRoutes);
 
 connectDb()
 setupWebSockets(server);

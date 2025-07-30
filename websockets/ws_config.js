@@ -19,7 +19,7 @@ export function setupWebSockets(server) {
 
 
 function onMessageReceived(clients, ws) {
-    return function incoming(message) {
+    return async function incoming(message) {
         try {
             const data = JSON.parse(message);
 
@@ -33,12 +33,14 @@ function onMessageReceived(clients, ws) {
                 const createdAt = new Date().toISOString();
 
                 try {
-                    conversationId = checkForExistingConversation(data.senderId, data.recipientId)
+                    conversationId = await checkForExistingConversation(data.senderId, data.recipientId)
                     const messageId = uuidv4();
 
                     if (!conversationId) {
                         console.log("Conversation does not exist, creating new conversation with id: ", conversationId, "")
-                        saveConversation(
+                        conversationId = uuidv4();
+
+                        await saveConversation(
                             conversationId,
                             data.senderId,
                             data.recipientId,
@@ -48,11 +50,11 @@ function onMessageReceived(clients, ws) {
                         )
                     } else {
                         console.log("Conversation exists, updating last message and createdAt")
-                        updateConversation(conversationId, data.content, createdAt)
+                        await updateConversation(conversationId, data.content, createdAt)
                     }
 
                     console.log("Saving message with id: ", messageId, "")
-                    saveMessage(
+                    await saveMessage(
                         messageId,
                         conversationId,
                         data.senderId,
