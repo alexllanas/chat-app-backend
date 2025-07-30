@@ -1,8 +1,8 @@
 import express from "express";
 import http from "http";
-import {setupWebSockets} from "./websockets/config.js";
+import {setupWebSockets} from "./websockets/ws_config.js";
 import {authenticateToken} from "./middleware/auth.js";
-import {client, connectDb} from "./database/config.js";
+import {client, connectDb} from "./database/db_config.js";
 import userRoutes from "./route/user_routes.js";
 
 

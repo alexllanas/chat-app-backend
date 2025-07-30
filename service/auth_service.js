@@ -7,7 +7,7 @@ export async function hashPassword(password) {
 }
 
 
-export function getToken(userId, email) {
+export function getAccessToken(userId, email) {
     return jwt.sign({id: userId, email: email}, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRATION,
     });

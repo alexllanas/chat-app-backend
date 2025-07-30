@@ -1,11 +1,8 @@
-import { client} from "../database/config.js";
+import { client} from "../database/db_config.js";
 import {v4 as uuidv4} from "uuid";
 import bcrypt from "bcrypt";
-import {getToken, hashPassword} from "../service/auth_service.js";
+import {getAccessToken, hashPassword} from "../service/auth_service.js";
 import {insertUser} from "../service/user_service.js";
-
-
-
 
 export function getHomePage(req, res) {
     res.send("Chat App");
@@ -27,18 +24,20 @@ export async function registerUser(req, res) {
     const hash = await hashPassword(password);
     const userId = uuidv4();
     const createdAt = new Date().toISOString();
+    const lastLogin = new Date().toISOString();
 
     try {
         await insertUser(userId, username, email, hash, createdAt);
 
-        const token = getToken(userId, email);
+        const token = getAccessToken(userId, email);
 
         return res.status(201).json({
             "id": userId,
             "username": username,
             "email": email,
-            "access_token": token,
-            "created_at": createdAt,
+            "accessToken": token,
+            "lastLogin": lastLogin,
+            "createdAt": createdAt,
         });
 
     } catch (err) {
@@ -76,12 +75,15 @@ export async function login(req, res) {
         return res.status(401).json({error: "Invalid email or password"});
     }
 
-    const token = getToken(user.id, email);
+    const accessToken = getAccessToken(user.id, email);
+    const lastLogin = new Date().toISOString();
 
     res.json({
         "id": user.id,
         "username": user.username,
         "email": email,
-        "access_token": token
+        "accessToken": accessToken,
+        "lastLogin": lastLogin,
+
     })
 }

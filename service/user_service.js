@@ -1,4 +1,4 @@
-import {client} from "../database/config.js";
+import {client} from "../database/db_config.js";
 import {POSTGRES_ERRORS} from "../database/constants.js";
 
 export function insertUser(userId, username, email, hash, createdAt) {

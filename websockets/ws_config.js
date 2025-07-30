@@ -8,7 +8,6 @@ export function setupWebSockets(server) {
         console.log("Client connected");
 
         ws.on("message", onMessage(clients, ws));
-
         // ws.send("Connected to WebSocket server");
     });
 }
