@@ -1,37 +1,80 @@
 import {WebSocketServer} from "ws";
+import {
+    checkForExistingConversation,
+    saveConversation,
+    saveMessage,
+    updateConversation
+} from "../service/message_service.js";
+import {v4 as uuidv4} from "uuid";
 
 export function setupWebSockets(server) {
     const wss = new WebSocketServer({server});
     const clients = new Map(); // userId => WebSocket
 
     wss.on("connection", function connection(ws) {
-        console.log("Client connected");
-
-        ws.on("message", onMessage(clients, ws));
-        // ws.send("Connected to WebSocket server");
+        console.log("Client connected to Websocket server");
+        ws.on("message", onMessageReceived(clients, ws));
     });
 }
 
 
-function onMessage(clients, ws) {
+function onMessageReceived(clients, ws) {
     return function incoming(message) {
         try {
             const data = JSON.parse(message);
-            console.log("received: ", data);
 
             if (data.type === "register" && data.userId) {
+                console.log("Registering user with id: ", data.userId, "")
                 clients.set(data.userId, ws);
-                console.log(`Registered user ${data.userId}`);
-            } else if (data.type === 'message' && data.content && data.senderId && data.recipientId) {
+            } else if (data.type === 'message') {
                 const client = clients.get(data.recipientId)
+
+                let conversationId;
+                const createdAt = new Date().toISOString();
+
+                try {
+                    conversationId = checkForExistingConversation(data.senderId, data.recipientId)
+                    const messageId = uuidv4();
+
+                    if (!conversationId) {
+                        console.log("Conversation does not exist, creating new conversation with id: ", conversationId, "")
+                        saveConversation(
+                            conversationId,
+                            data.senderId,
+                            data.recipientId,
+                            createdAt,
+                            data.content,
+                            createdAt
+                        )
+                    } else {
+                        console.log("Conversation exists, updating last message and createdAt")
+                        updateConversation(conversationId, data.content, createdAt)
+                    }
+
+                    console.log("Saving message with id: ", messageId, "")
+                    saveMessage(
+                        messageId,
+                        conversationId,
+                        data.senderId,
+                        data.recipientId,
+                        data.content,
+                        createdAt
+                    )
+                } catch (e) {
+                    console.error("Error checking for existing conversation", e);
+                }
+
+                console.log("Forwarding message to client with id: ", data.recipientId, "")
                 client.send(JSON.stringify(
                     {
                         id: data.id,
                         type: 'message',
+                        conversationId: conversationId,
                         senderId: data.senderId,
                         recipientId: data.recipientId,
                         content: data.content,
-                        timestamp: data.timestamp,
+                        createdAt: createdAt,
+                        isRead: false,
                     }
                 ))
             }

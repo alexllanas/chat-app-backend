@@ -2,7 +2,7 @@ import { client} from "../database/db_config.js";
 import {v4 as uuidv4} from "uuid";
 import bcrypt from "bcrypt";
 import {getAccessToken, hashPassword} from "../service/auth_service.js";
-import {insertUser} from "../service/user_service.js";
+import {saveUser} from "../service/user_service.js";
 
 export function getHomePage(req, res) {
     res.send("Chat App");
@@ -27,7 +27,7 @@ export async function registerUser(req, res) {
     const lastLogin = new Date().toISOString();
 
     try {
-        await insertUser(userId, username, email, hash, createdAt);
+        await saveUser(userId, username, email, hash, createdAt);
 
         const token = getAccessToken(userId, email);
 
