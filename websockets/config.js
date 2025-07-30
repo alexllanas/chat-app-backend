@@ -9,7 +9,7 @@ export function setupWebSockets(server) {
 
         ws.on("message", onMessage(clients, ws));
 
-        ws.send("Connected to WebSocket server");
+        // ws.send("Connected to WebSocket server");
     });
 }
 
