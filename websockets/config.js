@@ -25,7 +25,6 @@ function onMessage(clients, ws) {
                 console.log(`Registered user ${data.userId}`);
             } else if (data.type === 'message' && data.content && data.senderId && data.recipientId) {
                 const client = clients.get(data.recipientId)
-                console.log("Client connected", client);
                 client.send(JSON.stringify(
                     {
                         id: data.id,

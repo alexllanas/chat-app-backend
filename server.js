@@ -1,9 +1,9 @@
 import express from "express";
 import http from "http";
-import {getHomePage, getUsers, login, registerUser} from "./controller/user_controller.js";
 import {setupWebSockets} from "./websockets/config.js";
 import {authenticateToken} from "./middleware/auth.js";
 import {client, connectDb} from "./database/config.js";
+import userRoutes from "./route/user_routes.js";
 
 
 const app = express();
@@ -12,14 +12,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.get("/api/v1", getHomePage);
-app.get("/api/v1/users",
-    // authenticateToken,       // uncomment to authenticate user request, only removed for testing
-    getUsers
-)
-app.post("/api/v1/register", registerUser);
-app.post("/api/v1/login", login);
-
+app.use("/api/v1", userRoutes);
 
 connectDb()
 setupWebSockets(server);
