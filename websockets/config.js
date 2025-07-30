@@ -29,8 +29,8 @@ function onMessage(clients, ws) {
                 client.send(JSON.stringify(
                     {
                         id: data.id,
-                        senderId: data.sender_id,
-                        recipientId: data.recipient_id,
+                        sender_id: data.sender_id,
+                        recipient_id: data.recipient_id,
                         content: data.content,
                         timestamp: data.timestamp,
                     }
