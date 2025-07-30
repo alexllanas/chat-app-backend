@@ -20,18 +20,18 @@ function onMessage(clients, ws) {
             console.log("received: ", message);
             const data = JSON.parse(message);
 
-            if (data.type === "register" && data.user_id) {
-                clients.set(data.user_id, ws);
-                console.log(`Registered user ${data.user_id}`);
-            } else if (data.type === 'message' && data.content && data.sender_id && data.recipient_id) {
-                const client = clients.get(data.recipient_id)
+            if (data.type === "register" && data.userId) {
+                clients.set(data.userId, ws);
+                console.log(`Registered user ${data.userId}`);
+            } else if (data.type === 'message' && data.content && data.senderId && data.recipientId) {
+                const client = clients.get(data.recipientId)
                 console.log("Client connected", client);
                 client.send(JSON.stringify(
                     {
                         id: data.id,
                         type: 'message',
-                        sender_id: data.sender_id,
-                        recipient_id: data.recipient_id,
+                        senderId: data.senderId,
+                        recipientId: data.recipientId,
                         content: data.content,
                         timestamp: data.timestamp,
                     }
