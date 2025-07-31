@@ -18,7 +18,7 @@ export async function getConversations(req, res) {
 }
 
 export async function getMessageHistory(req, res) {
-    const conversationId = req.path.id;
+    const conversationId = req.params.id;
     if (!conversationId) {
         return res.status(401).json({error: "Unauthorized"});
     }
