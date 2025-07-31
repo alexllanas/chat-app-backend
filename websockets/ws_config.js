@@ -69,7 +69,7 @@ function onMessageReceived(clients, ws) {
                 console.log("Forwarding message to client with id: ", data.recipientId, "")
                 client.send(JSON.stringify(
                     {
-                        id: data.id,
+                        id: messageId,
                         type: 'message',
                         conversationId: conversationId,
                         senderId: data.senderId,
