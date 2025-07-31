@@ -4,6 +4,6 @@ import {getConversations, getMessageHistory} from "../controller/message_control
 const router = express.Router();
 
 router.get("/conversations", getConversations)
-router.get("/conversations/:id", getMessageHistory)
+router.get("/message_history/:id", getMessageHistory)
 
 export default router;
