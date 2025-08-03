@@ -1,9 +1,14 @@
 import express from "express";
-import {getConversations, getMessageHistory} from "../controller/message_controller.js";
+import {
+    checkIfChatExistsController,
+    getChatsController,
+    getMessagesController
+} from "../controller/message_controller.js";
 
 const router = express.Router();
 
-router.get("/conversations", getConversations)
-router.get("/message_history/:id", getMessageHistory)
+router.get("/users/:userId/chats", getChatsController)
+router.get("/chats/:chatId/messages", getMessagesController)
+router.get("chats/exists", checkIfChatExistsController)
 
 export default router;
